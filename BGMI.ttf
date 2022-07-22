@@ -1,0 +1,42 @@
+AVIHACKERYT=com.pubg.imobile
+am force-stop $AVIHACKERYT
+/system/bin/iptables -F
+/system/bin/iptables --flush
+/system/bin/iptables -P INPUT ACCEPT
+/system/bin/iptables -P FORWARD ACCEPT
+/system/bin/iptables -P OUTPUT ACCEPT
+/system/bin/iptables -t nat -F
+/system/bin/iptables -t mangle -F
+/system/bin/iptables -X
+lib=$(pm path $AVIHACKERYT | cut -d ':' -f2 | sed 's/\/base.apk//g')/lib/arm;
+lib=$(pm path $AVIHACKERYT | cut -d ':' -f2 | sed 's/\/base.apk//g')/lib/arm64;
+SAVE(){
+cp $lib/$1 $lib/$1.bak
+}
+Fast(){
+cp -rf $1 $1.bak ;rm -rf $1 ;mv $1.bak $1 ;chmod 755 $1
+}
+RETURN(){
+mv $lib/$1.bak $lib/$1
+}
+SAVE libgcloud.so
+SAVE libTDataMaster.so
+SAVE libCrashSightCore.so
+SAVE libPandoraVideo.so
+clear
+rm -rf $lib/{libapp.so,libCrashSight.so,libc++_shared.so,libflutter.so,libgamemaster.so,libgcloudarch.so,libhelpshiftlistener.so,libigshare.so,libImSDK.so,libkk-image.so,liblbs.so,libmarsxlog.so,libmmkv.so,libnpps-jni.so,libsentry.so,libsentry-android.so,libsoundtouch.so,libst-engine.so,libtgpa.so};
+pm disable com.pubg.imobile/com.sirius.flutter.im.MeemoBGService  &>/dev/null;
+pm disable com.pubg.imobile/com.tencent.midas.oversea.newnetwork.service.APNetDetectService  &>/dev/null;
+pm disable com.pubg.imobile/com.sirius.meemo.foreground_service.ForegroundService &>/dev/null;
+chmod 755 $lib/*
+rm -rf /data/media/0/Android/data/com.pubg.imobile/files/TGPA
+am start -S -W com.pubg.imobile/com.epicgames.ue4.SplashActivity > /dev/null
+while [ ! -e /data/media/0/Android/data/com.pubg.imobile/files/TGPA ]; do sleep 1; done
+sleep 1
+RETURN libgcloud.so
+RETURN libTDataMaster.so
+RETURN libPandoraVideo.so
+RETURN libCrashSightCore.so
+chmod 755 $lib/*
+chmod 000 $lib/{libgcloud.so,libTDataMaster.so,libUE4.so}
+clear 
